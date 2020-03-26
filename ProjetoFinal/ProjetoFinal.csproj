@@ -72,6 +72,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Efeitos\Binarizacao.cs" />
+    <Compile Include="Efeitos\FiltroModa.cs" />
     <Compile Include="Efeitos\Sepia.cs" />
     <Compile Include="Helpers\Enums\Canal.cs" />
     <Compile Include="Efeitos\FiltroMedia.cs" />
