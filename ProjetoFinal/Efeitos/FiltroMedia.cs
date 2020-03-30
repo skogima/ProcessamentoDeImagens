@@ -18,7 +18,24 @@ namespace ProjetoFinal
                 case Mascara.Robinson5:
                     return MascaraHelper.Robinson5;
                 default:
-                    return new int[,] { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } };
+                    return MascaraHelper.MediaPadrao;
+            }
+        }
+
+        private int GetFatorEscala(Mascara mascara)
+        {
+            switch (mascara)
+            {
+                case Mascara.Prewitt:
+                    return MascaraHelper.PrewittEscala;
+                case Mascara.Kirsch:
+                    return MascaraHelper.KirschEscala;
+                case Mascara.Robinson3:
+                    return MascaraHelper.Robinson3Escala;
+                case Mascara.Robinson5:
+                    return MascaraHelper.Robinson5Escala;
+                default:
+                    return MascaraHelper.PadraoEscala;
             }
         }
 
@@ -27,6 +44,7 @@ namespace ProjetoFinal
             var p = parameter?.ToString();
             Mascara mascara = (Mascara)Enum.Parse(typeof(Mascara), p ?? nameof(Mascara.Padrao));
             int[,] kernel = GetKernel(mascara);
+            int escala = GetFatorEscala(mascara);
 
             Bitmap bm = new Bitmap(bitmap.Width, bitmap.Height);
             int somaR, somaG, somaB;
@@ -63,7 +81,7 @@ namespace ProjetoFinal
                     if (somaG > 255)
                         somaG = 255;
 
-                    bm.SetPixel(i, j, Color.FromArgb(somaR / 9, somaG / 9, somaB / 9));
+                    bm.SetPixel(i, j, Color.FromArgb(somaR / escala, somaG / escala, somaB / escala));
                 }
             }
             return bm;
