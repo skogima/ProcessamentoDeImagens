@@ -37,6 +37,7 @@ namespace ProjetoFinal
         public Bitmap ImagemProcessadaSource { get; set; }
         public RelayCommand AplicarCommand { get; set; }
         public RelayCommand AbrirImagemCommand { get; set; }
+        public RelayCommand AlterarTemaCommand { get; set; }
 
         public MainWindowViewModel()
         {
@@ -46,6 +47,7 @@ namespace ProjetoFinal
                 !string.IsNullOrEmpty(ImagemOriginalSource) && 
                 !string.IsNullOrEmpty(EfeitoSelecionado));
             AbrirImagemCommand = new RelayCommand(AbrirImagem);
+            AlterarTemaCommand = new RelayCommand(AlterarTema);
         }
 
         private void AplicarEfeito()
@@ -84,6 +86,16 @@ namespace ProjetoFinal
                 return;
             ImagemOriginalSource = open.FileName;
             DefinirPropriedadesOriginal();
+        }
+
+        private void AlterarTema()
+        {
+            var tema = AppThemeHelper.GetTemaAtual();
+            if (tema == AppTheme.Light)
+                tema = AppTheme.Dark;
+            else
+                tema = AppTheme.Light;
+            AppThemeHelper.MudarTema(tema);
         }
     }
 }

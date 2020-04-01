@@ -15,16 +15,17 @@ namespace ProjetoFinal
 
             string v = value.ToString();
 
-            if (v.Equals(typeof(InversaoCanal).Name))
+            switch (v)
             {
-                return ParametersListHelper.InverterCanalList;
+                case nameof(InversaoCanal):
+                    return ParametersListHelper.InverterCanalList;
+                case nameof(FiltroMedia):
+                    return ParametersListHelper.PassaAltaList;
+                case nameof(Quantizacao):
+                    return ParametersListHelper.QuantizacaoCanais;
+                default:
+                    return new List<string>();
             }
-            else if (v.Equals(typeof(FiltroMedia).Name))
-            {
-                return ParametersListHelper.PassaAltaList;
-            }
-
-            return new List<string>();
         }
 
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

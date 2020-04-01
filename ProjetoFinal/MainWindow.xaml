@@ -15,7 +15,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         Title="Processamento de imagens digitais" 
-        Height="500" MinHeight="500" Width="800" MinWidth="800">
+        Height="550" MinHeight="500" Width="800" MinWidth="800">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -37,10 +37,17 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Column="0" Text="Efeitos: " VerticalAlignment="Center" />
+            <TextBlock Grid.Column="0" Text="Efeitos: " VerticalAlignment="Center" FontSize="14" Foreground="{DynamicResource TextForegroundBrush}" />
             <ComboBox Name="efeitosComboBox" Grid.Column="1" ItemsSource="{Binding EfeitoItens}"
                       SelectedItem="{Binding EfeitoSelecionado}" Margin="0 5" />
-            <Button Grid.Column="3" Grid.RowSpan="2" Command="{Binding AplicarCommand}" Background="#FF6666" BorderBrush="#FF6666" Content="Aplicar Efeito" />
+
+            <Button Width="40" Height="40" Grid.Column="2" Command="{Binding AlterarTemaCommand}"
+                    Style="{StaticResource MaterialDesignToolButton}">
+                <fa:ImageAwesome Icon="Adjust"  Foreground="{DynamicResource BorderColorBrush}"  />
+            </Button>
+
+            <Button Grid.Column="3" Grid.RowSpan="2" FontWeight="Normal" Command="{Binding AplicarCommand}" Background="{StaticResource CorDestaqueBrush}" 
+                    BorderBrush="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Background}" Content="Aplicar Efeito" />
 
             <TextBlock Grid.Column="0" Grid.Row="1" Text="Parâmetro: " 
                        VerticalAlignment="Center" 
@@ -57,9 +64,9 @@
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 0">
                     <GradientStop Color="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Background}" Offset="0.0" />
-                    <GradientStop Color="#303030" Offset="0.25" />
+                    <GradientStop Color="{DynamicResource BorderColor}" Offset="0.25" />
                     <GradientStop Color="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Background}" Offset="0.5" />
-                    <GradientStop Color="#303030"  Offset="0.75" />
+                    <GradientStop Color="{DynamicResource BorderColor}"  Offset="0.75" />
                     <GradientStop Color="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Background}"  Offset="1.0" />
                 </LinearGradientBrush>
             </Border.BorderBrush>
@@ -83,37 +90,39 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Panel.ZIndex="2" Visibility="{Binding Path=IsLoadingPanelVisible, Converter={local:BoolToVisibilityConverter}}">
+            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Panel.ZIndex="2" Visibility="{Binding Path=IsLoadingPanelVisible, Converter={local:BoolToVisibilityConverter}, FallbackValue=Collapsed}">
                 <Grid.Background>
-                    <SolidColorBrush Opacity="0.8" Color="#FAFAFA" />
+                    <SolidColorBrush Opacity="0.8" Color="{DynamicResource LoadingPanelColor}" />
                 </Grid.Background>
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Text="Calculando..." FontSize="30">
+                    <TextBlock Text="Calculando..." FontSize="30" Foreground="{DynamicResource CaptionForegroundBrush}">
                         <TextBlock.Effect>
-                            <DropShadowEffect Opacity="0.2" BlurRadius="0" RenderingBias="Quality" ShadowDepth="3" />
+                            <DropShadowEffect Opacity="0.2" Color="{DynamicResource CaptionForeground}" BlurRadius="0" RenderingBias="Quality" ShadowDepth="3" />
                         </TextBlock.Effect>
                     </TextBlock>
-                    <fa:ImageAwesome Icon="Cog" Spin="True" Height="50" Width="50" />
+                    <fa:ImageAwesome Icon="Cog" Spin="True" Height="50" Width="50" Foreground="{DynamicResource CaptionForegroundBrush}" />
                 </StackPanel>
             </Grid>
             
-            <Border Grid.Row="0" Grid.Column="0" BorderThickness="0 0 0.2 0">
+            <Border Grid.Row="0" Grid.Column="0" BorderThickness="0 0 0.3 0">
                 <!--region Borda lateral -->
                 <Border.BorderBrush>
                     <LinearGradientBrush StartPoint="0, 0" EndPoint="0, 1">
                         <GradientStop Color="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Background}" Offset="0.0" />
-                        <GradientStop Color="#303030"  Offset="0.5" />
+                        <GradientStop Color="{DynamicResource BorderColor}"  Offset="0.5" />
                         <GradientStop Color="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Background}"  Offset="1.0" />
                     </LinearGradientBrush>
                 </Border.BorderBrush>
                 <!--#endregion-->
             
-            <Button Style="{StaticResource HoverlessButton}" Command="{Binding AbrirImagemCommand}">
+            <Button Style="{StaticResource HoverlessButton}" FontWeight="Light" Command="{Binding AbrirImagemCommand}">
                     <Grid>
                         <Image Source="{Binding ImagemOriginalSource}" Stretch="Fill" Panel.ZIndex="1" />
-                        <TextBlock Foreground="#303030" Text="Clique para abrir uma imagem" FontSize="18" Panel.ZIndex="0">
+                        <TextBlock Text="Clique para abrir uma imagem" FontSize="18" Panel.ZIndex="0"
+                                   Foreground="{DynamicResource CaptionForegroundBrush}">
                             <TextBlock.Effect>
-                                <DropShadowEffect ShadowDepth="6" Opacity="0.3"  />
+                                <DropShadowEffect Opacity="0.2" 
+                                                  Color="{DynamicResource CaptionForeground}" />
                             </TextBlock.Effect>
                         </TextBlock>
                     </Grid>
@@ -127,10 +136,9 @@
                 <TextBlock Text="{Binding ImagemOriginalResolucao}" />
             </StackPanel>
             <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="5">
-                <TextBlock Text="Resolução: " />
+                <TextBlock Text="Resolução: "  />
                 <TextBlock Text="{Binding ImagemProcessadaResolucao}" />
             </StackPanel>
-            
         </Grid>
     </Grid>
 </Window>
