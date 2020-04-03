@@ -2,46 +2,90 @@
 {
     public class MascaraHelper
     {
-        public static int PrewittEscala { get; private set; } = 5;
-        public static int[,] Prewitt { get; private set; } = new int[3, 3] 
+        public static int[,] GetKernel(Mascara mascara)
+        {
+            switch (mascara)
+            {
+                case Mascara.Prewitt:
+                    return prewitt;
+                case Mascara.Kirsch:
+                    return kirsch;
+                case Mascara.Sobel:
+                    return sobel;
+                case Mascara.Robinson3:
+                    return robinson3;
+                case Mascara.Robinson5:
+                    return robinson5;
+                default:
+                    return MediaPadrao;
+            }
+        }
+
+        public static int GetFatorEscala(Mascara mascara)
+        {
+            switch (mascara)
+            {
+                case Mascara.Prewitt:
+                    return prewittEscala;
+                case Mascara.Kirsch:
+                    return kirschEscala;
+                case Mascara.Sobel:
+                    return sobelEscala;
+                case Mascara.Robinson3:
+                    return robinson3Escala;
+                case Mascara.Robinson5:
+                    return robinson5Escala;
+                default:
+                    return padraoEscala;
+            }
+        }
+
+        private static int prewittEscala = 5;
+        private static int[,] prewitt = new int[3, 3] 
         { 
             { 1, 1, 1 }, 
             { 1, -2, 1 }, 
             { -1, -1, -1 } 
         };
 
-        public static int KirschEscala { get; private set; } = 15;
-        public static int[,] Kirsch { get; private set; } = new int[3, 3] 
+        private static int kirschEscala = 15;
+        private static int[,] kirsch = new int[3, 3] 
         { 
             { 5, 5, 5 }, 
             { -3, 0, -3 }, 
             { -3, -3, -3 } 
         };
 
-        public static int Robinson3Escala { get; private set; } = 3;
-        public static int[,] Robinson3 { get; private set; } = new int[3, 3] 
+        private static int sobelEscala = 1;
+        private static int[,] sobel = new int[3, 3] 
+        { 
+            { -1, -2, -1 }, 
+            { 0, 0, 0 }, 
+            { 1, 2, 1 } 
+        };
+
+        private static int robinson3Escala = 3;
+        private static int[,] robinson3 = new int[3, 3] 
         { 
             { 1, 1, 1 }, 
             { 0, 0, 0 },
             { -1, -1, -1 } 
         };
 
-        public static int Robinson5Escala { get; private set; } = 5;
-        public static int[,] Robinson5 { get; private set; } = new int[3, 3] 
+        private static int robinson5Escala = 5;
+        private static int[,] robinson5 = new int[3, 3] 
         { 
             { 1, 2, 1 },
             { 0, 0, 0 }, 
             { -1, -2, -1 } 
         };
 
-        public static int PadraoEscala { get; private set; } = 9;
-        public static int[,] MediaPadrao { get; private set; } = new int[3, 3]
+        private static int padraoEscala = 9;
+        private static int[,] MediaPadrao = new int[3, 3]
         {
             { 1, 1, 1 },
             { 1, 1, 1 },
             { 1, 1, 1 }
         };
-
-
     }
 }

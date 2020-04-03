@@ -19,7 +19,7 @@ namespace ProjetoFinal
             {
                 case nameof(InversaoCanal):
                     return ParametersListHelper.InverterCanalList;
-                case nameof(FiltroMedia):
+                case nameof(PassaAlta):
                     return ParametersListHelper.PassaAltaList;
                 case nameof(Quantizacao):
                     return ParametersListHelper.QuantizacaoCanais;

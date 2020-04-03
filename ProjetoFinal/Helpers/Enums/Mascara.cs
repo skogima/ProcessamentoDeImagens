@@ -3,7 +3,8 @@
     public enum Mascara
     {
         Prewitt,
-        Kirsch, 
+        Kirsch,
+        Sobel,
         Robinson3,
         Robinson5,
         Padrao
