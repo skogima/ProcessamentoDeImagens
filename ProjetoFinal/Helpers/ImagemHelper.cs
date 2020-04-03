@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows;
 using System.Runtime.InteropServices;
 using System.Windows.Media.Imaging;
+using System.IO;
 
 namespace ProjetoFinal
 {
@@ -14,7 +15,10 @@ namespace ProjetoFinal
 
         public static Bitmap ToBitmap(string source)
         {
-            return new Bitmap(source);
+            using (FileStream stream = new FileStream(source, FileMode.Open, FileAccess.Read))
+            {
+                return new Bitmap(stream);
+            }
         }
 
         public static BitmapSource ToBitmapSource(Bitmap bitmap)
