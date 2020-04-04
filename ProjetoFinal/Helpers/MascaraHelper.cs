@@ -16,6 +16,8 @@
                     return robinson3;
                 case Mascara.Robinson5:
                     return robinson5;
+                case Mascara.LaPlaciano:
+                    return laPlaciano;
                 default:
                     return MediaPadrao;
             }
@@ -35,6 +37,8 @@
                     return robinson3Escala;
                 case Mascara.Robinson5:
                     return robinson5Escala;
+                case Mascara.LaPlaciano:
+                    return laplaceEscala;
                 default:
                     return padraoEscala;
             }
@@ -78,6 +82,14 @@
             { 1, 2, 1 },
             { 0, 0, 0 }, 
             { -1, -2, -1 } 
+        };
+        
+        private static int laplaceEscala = 1;
+        private static int[,] laPlaciano = new int[3, 3] 
+        { 
+            { 0, 1, 0 },
+            { 1, -4, 1 }, 
+            { 0, 1, 0 } 
         };
 
         private static int padraoEscala = 9;

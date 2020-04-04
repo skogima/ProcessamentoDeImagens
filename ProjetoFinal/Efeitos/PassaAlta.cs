@@ -46,7 +46,7 @@ namespace ProjetoFinal
                         somaG = 0;
                     else if (somaG > 255)
                         somaG = 255;
-                    bm.SetPixel(i, j, Color.FromArgb(media / escala, media / escala, media / escala));
+                    bm.SetPixel(i, j, Color.FromArgb(somaR / escala, somaB / escala, somaG / escala));
                 }
             }
             return bm;

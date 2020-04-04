@@ -7,6 +7,7 @@
         Sobel,
         Robinson3,
         Robinson5,
+        LaPlaciano,
         Padrao
     }
 }
