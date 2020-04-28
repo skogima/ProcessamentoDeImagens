@@ -11,6 +11,7 @@ namespace ProjetoFinal
         {
             InitializeComponent();
             
+
             DataContext = new MainWindowViewModel();
         }
     }

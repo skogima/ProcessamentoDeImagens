@@ -13,6 +13,8 @@
 
     <Color x:Key="BorderColor">#FAFAFA</Color>
     <SolidColorBrush x:Key="BorderColorBrush" Color="{StaticResource BorderColor}" />
-    
-    
+
+    <Color x:Key="DarkColor">#FEFEFE</Color>
+    <SolidColorBrush x:Key="DarkColorBrush" Color="{StaticResource DarkColor}" />
+
 </ResourceDictionary>

@@ -19,7 +19,7 @@
                 case Mascara.LaPlaciano:
                     return laPlaciano;
                 default:
-                    return MediaPadrao;
+                    return prewitt;
             }
         }
 
@@ -40,7 +40,7 @@
                 case Mascara.LaPlaciano:
                     return laplaceEscala;
                 default:
-                    return padraoEscala;
+                    return prewittEscala;
             }
         }
 
@@ -90,14 +90,6 @@
             { 0, 1, 0 },
             { 1, -4, 1 }, 
             { 0, 1, 0 } 
-        };
-
-        private static int padraoEscala = 9;
-        private static int[,] MediaPadrao = new int[3, 3]
-        {
-            { 1, 1, 1 },
-            { 1, 1, 1 },
-            { 1, 1, 1 }
         };
     }
 }

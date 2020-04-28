@@ -11,15 +11,16 @@ namespace ProjetoFinal
     public class MainWindowViewModel : BaseViewModel
     {
         private Bitmap originalBitmap;
-        private string imagemOriginalSource;
         private string efeitoSelecionado;
+        private bool isLoadingPanelVisibile = false;
 
-        public string ImagemOriginalSource
+        public Bitmap ImagemOriginalBitmap
         {
-            get => imagemOriginalSource;
+            get => originalBitmap;
             set
             {
-                imagemOriginalSource = value;
+                originalBitmap = value;
+                ImagemOriginalResolucao = $"{originalBitmap.Width}x{originalBitmap.Height}";
                 AplicarCommand.RaiseCanExecuteChanged();
             }
         }
@@ -32,8 +33,26 @@ namespace ProjetoFinal
                 AplicarCommand.RaiseCanExecuteChanged();
             }
         }
+        public bool IsLoadingPanelVisible
+        {
+            get => isLoadingPanelVisibile;
+            set
+            {
+                isLoadingPanelVisibile = value;
+                AplicarCommand.RaiseCanExecuteChanged();
+            }
+        }
+        private bool calcularHistograma = false;
+        public bool CalcularHistograma { get => calcularHistograma; 
+            set 
+            { 
+                calcularHistograma = value;
+                if (value && ExibirHistograma && HistogramaOriginal.EstaVazio() && HistogramaProcessado.EstaVazio())
+                    GerarHistograma();
+            } 
+        }
+        public bool ExibirHistograma { get; set; }
         public string ParametroSelecionado { get; set; }
-        public bool IsLoadingPanelVisible { get; set; } = false;
         public string ImagemOriginalResolucao { get; set; } = "0x0";
         public string ImagemProcessadaResolucao { get; set; } = "0x0";
         public List<string> EfeitoItens { get; set; }
@@ -42,19 +61,27 @@ namespace ProjetoFinal
         public RelayCommand AbrirImagemCommand { get; set; }
         public RelayCommand AlterarTemaCommand { get; set; }
         public RelayCommand SalvarImagemCommand { get; set; }
+        public ParamCommand GirarImagemCommand { get; set; }
+        public HistogramaHelper HistogramaOriginal { get; set; }
+        public HistogramaHelper HistogramaProcessado { get; set; }
+
         public MainWindowViewModel()
         {
-            EfeitoItens = ReflectionHelper.GetTypesAssignableFrom<IEfeito>();         
+            EfeitoItens = ReflectionHelper.GetTypesAssignableFrom<IEfeito>();
+            HistogramaOriginal = new HistogramaHelper();
+            HistogramaProcessado = new HistogramaHelper();
 
             AplicarCommand = new RelayCommand(AplicarEfeito, () => 
-                !string.IsNullOrEmpty(ImagemOriginalSource) && 
-                !string.IsNullOrEmpty(EfeitoSelecionado));
-
+                originalBitmap != null && 
+                !string.IsNullOrEmpty(EfeitoSelecionado) &&
+                !IsLoadingPanelVisible);
 
             AbrirImagemCommand = new RelayCommand(AbrirImagem);
             AlterarTemaCommand = new RelayCommand(AlterarTema);
             SalvarImagemCommand = new RelayCommand(SalvarImagem);
+            GirarImagemCommand = new ParamCommand(GirarImagem);
         }
+
 
         private void AplicarEfeito()
         {
@@ -66,31 +93,64 @@ namespace ProjetoFinal
         private async void AplicarEfeito(IEfeito efeito, object parameter)
         {
             IsLoadingPanelVisible = true;
-            await Task.Run(() => 
+            HistogramaOriginal.Limpar();
+            HistogramaProcessado.Limpar();
+
+            await Task.Run(() =>
             {
                 ImagemProcessadaSource = efeito.AplicarEfeito(originalBitmap, parameter);
+                if (CalcularHistograma)
+                {
+                    HistogramaOriginal.Calcular(originalBitmap);
+                    HistogramaProcessado.Calcular(ImagemProcessadaSource);
+                }
+
             });
             ImagemProcessadaResolucao = $"{ImagemProcessadaSource.Width}x{ImagemProcessadaSource.Height}";
             IsLoadingPanelVisible = false;
+            ExibirHistograma = true;
         }
 
-        private void DefinirPropriedadesOriginal()
+        private async void GerarHistograma()
         {
-            ImagemOriginalResolucao = $"{originalBitmap.Width}x{originalBitmap.Height}";
+            bool aposEfeito = IsLoadingPanelVisible;
+            if (!aposEfeito)
+                IsLoadingPanelVisible = true;
+
+            await Task.Run(() =>
+            {
+                HistogramaOriginal.Calcular(originalBitmap);
+                HistogramaProcessado.Calcular(ImagemProcessadaSource);
+            });
+
+            if (!aposEfeito)
+                IsLoadingPanelVisible = false;
+        }
+
+        private async void GirarImagem(object obj)
+        {
+            IsLoadingPanelVisible = true;
+            Bitmap bitmap = null;
+            await Task.Run(() =>
+            {
+                bitmap = Girar.AplicarEfeito(originalBitmap, obj);
+            });
+            ImagemOriginalBitmap = bitmap;
+            IsLoadingPanelVisible = false;
         }
 
         private void AbrirImagem()
         {
             OpenFileDialog open = new OpenFileDialog
             {
-                Filter = "Arquivos de Imagens|*.png;*.jpg;*.jpeg;*.gif|Todos os Arquivos|*.*"
+                Filter = "Arquivos de Imagens|*.png;*.jpg;*.jpeg;*.gif;*.bmp|Todos os Arquivos|*.*"
             };
             bool result = open.ShowDialog() ?? false;
             if (!result)
                 return;
-            ImagemOriginalSource = open.FileName;
-            originalBitmap = ImagemHelper.ToBitmap(ImagemOriginalSource);
-            DefinirPropriedadesOriginal();
+
+            ImagemOriginalBitmap = ImagemHelper.ToBitmap(open.FileName);
+            ExibirHistograma = false;
             open.Reset();
         }
 

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjetoFinal"
+        xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -16,140 +17,221 @@
         mc:Ignorable="d"
         Title="Processamento de imagens digitais" 
         Height="550" MinHeight="500" Width="800" MinWidth="800">
+    
+    <!--#region DialogHost para o histograma -->
+    <materialDesign:DialogHost CloseOnClickAway="True">
+        <materialDesign:DialogHost.DialogContent>
+            <Grid Width="650" Height="350" Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+                <oxy:Plot Grid.Column="0" Grid.Row="0" Margin="5 0">
+                    <oxy:LineSeries StrokeThickness="2" Color="Green" 
+                                    ItemsSource="{Binding HistogramaOriginal.HistogramaG, UpdateSourceTrigger=PropertyChanged}" />
+                    <oxy:LineSeries StrokeThickness="2" Color="Blue" 
+                                    ItemsSource="{Binding HistogramaOriginal.HistogramaB, UpdateSourceTrigger=PropertyChanged}" />
+                    <oxy:LineSeries StrokeThickness="2" Color="Red" 
+                                    ItemsSource="{Binding HistogramaOriginal.HistogramaR, UpdateSourceTrigger=PropertyChanged}" />
+                </oxy:Plot>
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="Histograma da imagem original" HorizontalAlignment="Center" />
 
-        <Grid Grid.Row="0" Margin="10 10 10 0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.Column="0" Text="Efeitos: " VerticalAlignment="Center" FontSize="14" 
-                       Foreground="{DynamicResource TextForegroundBrush}" />
-
-            <ComboBox Name="efeitosComboBox" Grid.Column="1" ItemsSource="{Binding EfeitoItens}"
-                      SelectedItem="{Binding EfeitoSelecionado}" Margin="0 5" />
-
-            <Button Width="40" Height="40" Grid.Column="2" Command="{Binding AlterarTemaCommand}"
-                    Style="{StaticResource MaterialDesignToolButton}">
-                <fa:ImageAwesome Icon="Adjust"  Foreground="{DynamicResource BorderColorBrush}" />
-            </Button>
-
-            <Button Grid.Column="3" Grid.RowSpan="2" FontWeight="Normal" Content="Aplicar Efeito" 
-                    Command="{Binding AplicarCommand}" Background="{StaticResource CorDestaqueBrush}" 
-                    BorderBrush="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Background}" />
-
-            <TextBlock Grid.Column="0" Grid.Row="1" Text="Parâmetro: " 
-                       VerticalAlignment="Center" 
-                       Visibility="{Binding ElementName=parameterComboBox, Path=Visibility}" Margin="0 0 5 0" />
-            
-            <ComboBox Grid.Column="1" Grid.Row="1" Margin="0 5" x:Name="parameterComboBox"
-                      SelectedItem="{Binding ParametroSelecionado}"
-                      Visibility="{Binding ElementName=parameterComboBox, Path=ItemsSource, Converter={local:EnumerableToVisibilityConverter}}"
-                      ItemsSource="{Binding ElementName=efeitosComboBox, Path=SelectedItem, Converter={local:StringToListConverter}}"
-                      />
-        </Grid>
-
-        <!--#region Borda separadora -->
-        <Border Grid.Row="1" BorderThickness="0.2" Margin="0 10 0 0">
-            <Border.BorderBrush>
-                <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 0">
-                    <GradientStop Color="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Background}" Offset="0.0" />
-                    <GradientStop Color="{DynamicResource BorderColor}" Offset="0.25" />
-                    <GradientStop Color="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Background}" Offset="0.5" />
-                    <GradientStop Color="{DynamicResource BorderColor}"  Offset="0.75" />
-                    <GradientStop Color="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Background}"  Offset="1.0" />
-                </LinearGradientBrush>
-            </Border.BorderBrush>
-
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0, 0" EndPoint="0,1">
-                    <GradientStop Color="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Background}"  Offset="0.0" />
-                    <GradientStop Color="#FFF"  Offset="1.0" />
-                </LinearGradientBrush>
-            </Border.Background>
-        </Border>
+                <oxy:Plot Grid.Column="1" Grid.Row="0" Margin="5 0">
+                    <oxy:LineSeries Color="Red" StrokeThickness="2" 
+                                    ItemsSource="{Binding HistogramaProcessado.HistogramaR, UpdateSourceTrigger=PropertyChanged}" />
+                    <oxy:LineSeries Color="Green" StrokeThickness="2"
+                                    ItemsSource="{Binding HistogramaProcessado.HistogramaG, UpdateSourceTrigger=PropertyChanged}" />
+                    <oxy:LineSeries Color="Blue" StrokeThickness="2" 
+                                    ItemsSource="{Binding HistogramaProcessado.HistogramaB, UpdateSourceTrigger=PropertyChanged}" />
+                </oxy:Plot>
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="Histograma da imagem processada" HorizontalAlignment="Center" />
+            </Grid>
+        </materialDesign:DialogHost.DialogContent>
         <!--#endregion-->
-
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        
+        <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Panel.ZIndex="2" 
-                  Visibility="{Binding Path=IsLoadingPanelVisible, Converter={local:BoolToVisibilityConverter}, FallbackValue=Collapsed}">
-                <Grid.Background>
-                    <SolidColorBrush Opacity="0.8" Color="{DynamicResource LoadingPanelColor}" />
-                </Grid.Background>
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Text="Calculando..." FontSize="30" Foreground="{DynamicResource CaptionForegroundBrush}">
-                        <TextBlock.Effect>
-                            <DropShadowEffect Opacity="0.2" Color="{DynamicResource CaptionForeground}" BlurRadius="0" RenderingBias="Quality" ShadowDepth="3" />
-                        </TextBlock.Effect>
-                    </TextBlock>
-                    <fa:ImageAwesome Icon="Cog" Spin="True" Height="50" Width="50" Foreground="{DynamicResource CaptionForegroundBrush}" />
-                </StackPanel>
+            <Grid Grid.Row="0" Margin="10 10 10 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Column="0" Text="Efeitos: " VerticalAlignment="Center" FontSize="14" 
+                       Foreground="{DynamicResource TextForegroundBrush}" Visibility="Visible" />
+                <ComboBox Name="efeitosComboBox" Grid.Column="1" ItemsSource="{Binding EfeitoItens}"
+                      SelectedItem="{Binding EfeitoSelecionado}" Margin="0 5" Visibility="Visible" />
+
+                <Button Width="40" Height="40" Grid.Column="2" Command="{Binding AlterarTemaCommand}"
+                    Style="{StaticResource MaterialDesignToolButton}">
+                    <fa:ImageAwesome Icon="Adjust"  Foreground="{DynamicResource BorderColorBrush}" />
+                </Button>
+
+                <Button Grid.Column="3" Grid.RowSpan="2" FontWeight="Normal" Content="Aplicar Efeito" 
+                    Command="{Binding AplicarCommand}" Background="{StaticResource CorDestaqueBrush}" 
+                    BorderBrush="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Background}" Focusable="False" />
+
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="Parâmetro: " 
+                       VerticalAlignment="Center" 
+                       Margin="0 0 5 0">
+                    <TextBlock.Visibility>
+                        <MultiBinding Converter="{local:VisibilityOrMultiConverter}">
+                            <Binding ElementName="parameterComboBox" Path="Visibility" />
+                            <Binding ElementName="parameterTextBox" Path="Visibility" />
+                        </MultiBinding>
+                    </TextBlock.Visibility>
+                </TextBlock>
+
+                <TextBox Grid.Column="1" Grid.Row="1" x:Name="parameterTextBox"
+                         Margin="0 5" Visibility="{Binding ElementName=efeitosComboBox, Path=SelectedItem, Converter={local:StringToVisibilityConverter}}"
+                         Text="{Binding ParametroSelecionado, UpdateSourceTrigger=PropertyChanged}" />
+
+                <ComboBox Grid.Column="1" Grid.Row="1" Margin="0 5" x:Name="parameterComboBox"
+                      SelectedItem="{Binding ParametroSelecionado}"
+                      Visibility="{Binding ElementName=parameterComboBox, Path=ItemsSource, Converter={local:EnumerableToVisibilityConverter}}"
+                      ItemsSource="{Binding ElementName=efeitosComboBox, Path=SelectedItem, Converter={local:StringToListConverter}}"
+                      />
             </Grid>
 
-            <Border Grid.Row="0" Grid.Column="0" BorderThickness="0 0 0.3 0">
-                <!--region Borda lateral -->
+            <!--#region Borda separadora -->
+            <Border Grid.Row="1" BorderThickness="0.2" Margin="0 10 0 0">
                 <Border.BorderBrush>
-                    <LinearGradientBrush StartPoint="0, 0" EndPoint="0, 1">
+                    <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 0">
                         <GradientStop Color="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Background}" Offset="0.0" />
-                        <GradientStop Color="{DynamicResource BorderColor}"  Offset="0.5" />
+                        <GradientStop Color="{DynamicResource BorderColor}" Offset="0.25" />
+                        <GradientStop Color="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Background}" Offset="0.5" />
+                        <GradientStop Color="{DynamicResource BorderColor}"  Offset="0.75" />
                         <GradientStop Color="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Background}"  Offset="1.0" />
                     </LinearGradientBrush>
                 </Border.BorderBrush>
-                <!--#endregion-->
 
-                <Button Style="{StaticResource HoverlessButton}" FontWeight="Light" Command="{Binding AbrirImagemCommand}">
-                    <Grid>
-                        <Image Source="{Binding ImagemOriginalSource}" Stretch="Fill" Panel.ZIndex="1" />
-                        <TextBlock Text="Clique para abrir uma imagem" FontSize="18" Panel.ZIndex="0"
-                                   Foreground="{DynamicResource CaptionForegroundBrush}">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0, 0" EndPoint="0,1">
+                        <GradientStop Color="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Background}"  Offset="0.0" />
+                        <GradientStop Color="#FFF"  Offset="1.0" />
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
+            <!--#endregion-->
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="3" Panel.ZIndex="2" 
+                  Visibility="{Binding Path=IsLoadingPanelVisible, Converter={local:BoolToVisibilityConverter}, FallbackValue=Collapsed}">
+                    <Grid.Background>
+                        <SolidColorBrush Opacity="0.8" Color="{DynamicResource LoadingPanelColor}" />
+                    </Grid.Background>
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="Calculando..." FontSize="30" Foreground="{DynamicResource CaptionForegroundBrush}">
                             <TextBlock.Effect>
-                                <DropShadowEffect Opacity="0.2" 
-                                                  Color="{DynamicResource CaptionForeground}" />
+                                <DropShadowEffect Opacity="0.2" Color="{DynamicResource CaptionForeground}" BlurRadius="0" RenderingBias="Quality" ShadowDepth="3" />
                             </TextBlock.Effect>
                         </TextBlock>
-                    </Grid>
-                </Button>
-            </Border>
-            <Image Grid.Row="0" Grid.Column="1" Stretch="Fill" 
-                   Source="{Binding ImagemProcessadaSource, Converter={local:BitmapToBitmapSourceConverter}}">
-                <Image.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Salvar Imagem..." Command="{Binding SalvarImagemCommand}" />
-                    </ContextMenu>
-                </Image.ContextMenu>
-            </Image>
+                        <fa:ImageAwesome Icon="Cog" Spin="True" Height="50" Width="50" Foreground="{DynamicResource CaptionForegroundBrush}" />
+                    </StackPanel>
+                </Grid>
 
-            <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="5">
-                <TextBlock Text="Resolução: " />
-                <TextBlock Text="{Binding ImagemOriginalResolucao}" />
-            </StackPanel>
-            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="5">
-                <TextBlock Text="Resolução: "  />
-                <TextBlock Text="{Binding ImagemProcessadaResolucao}" />
-            </StackPanel>
+                <Border Grid.Row="0" Grid.Column="0" BorderThickness="0 0 0.3 0">
+                    <!--region Borda lateral -->
+                    <Border.BorderBrush>
+                        <LinearGradientBrush StartPoint="0, 0" EndPoint="0, 1">
+                            <GradientStop Color="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Background}" Offset="0.0" />
+                            <GradientStop Color="{DynamicResource BorderColor}"  Offset="0.5" />
+                            <GradientStop Color="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Background}"  Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Border.BorderBrush>
+                    <!--#endregion-->
+
+                    <Button Style="{StaticResource HoverlessButton}" FontWeight="Light" Command="{Binding AbrirImagemCommand}">
+                        <Grid>
+                            <Image Source="{Binding ImagemOriginalBitmap, Converter={local:BitmapToBitmapSourceConverter}}" Stretch="Fill" Panel.ZIndex="1">
+                                <Image.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Girar Imagem...">
+                                            <MenuItem Header="Direita" Command="{Binding GirarImagemCommand}" CommandParameter="{x:Static local:Sentido.Direita}" />
+                                            <MenuItem Header="Esquerda" Command="{Binding GirarImagemCommand}" CommandParameter="{x:Static local:Sentido.Esquerda}" />
+                                            <MenuItem Header="Vertical" Command="{Binding GirarImagemCommand}" CommandParameter="{x:Static local:Sentido.Vertical}" />
+                                            <MenuItem Header="Horizontal" Command="{Binding GirarImagemCommand}" CommandParameter="{x:Static local:Sentido.Horizontal}" />
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </Image.ContextMenu>
+                            </Image>
+                            <TextBlock Text="Clique para abrir uma imagem" FontSize="18" Panel.ZIndex="0"
+                                   Foreground="{DynamicResource CaptionForegroundBrush}">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect Opacity="0.2" 
+                                                  Color="{DynamicResource CaptionForeground}" />
+                                </TextBlock.Effect>
+                            </TextBlock>
+                        </Grid>
+                    </Button>
+                </Border>
+                <Image Grid.Row="0" Grid.Column="1" Stretch="Fill" 
+                   Source="{Binding ImagemProcessadaSource, Converter={local:BitmapToBitmapSourceConverter}}">
+                    <Image.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Salvar Imagem..." Command="{Binding SalvarImagemCommand}" />
+                        </ContextMenu>
+                    </Image.ContextMenu>
+                </Image>
+
+                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="5" HorizontalAlignment="Center" >
+                    <TextBlock Text="Resolução: " />
+                    <TextBlock Text="{Binding ImagemOriginalResolucao}"  />
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                    <TextBlock Text="Resolução: "  />
+                    <TextBlock Text="{Binding ImagemProcessadaResolucao}" />
+                </StackPanel>
+
+                <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 0 5" 
+                        Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                        VerticalAlignment="Center" HorizontalAlignment="Center" 
+                        Content="{materialDesign:PackIcon Kind=ChartBar,Size=24}"
+                        Background="{StaticResource CorDestaqueBrush}"
+                        BorderBrush="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Background}">
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{local:BoolAndMultiConverter}">
+                            <Binding Path="ExibirHistograma" />
+                            <Binding Path="CalcularHistograma" />
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
+
+                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal"
+                            VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="Calcular histograma?" Margin="7 0"/>
+                    <ToggleButton IsChecked="{Binding CalcularHistograma, Mode=TwoWay}" />
+                </StackPanel>
+
+            </Grid>
         </Grid>
-    </Grid>
+    </materialDesign:DialogHost>
 </Window>

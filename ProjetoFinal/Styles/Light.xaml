@@ -14,5 +14,7 @@
     <Color x:Key="BorderColor">#303030</Color>
     <SolidColorBrush x:Key="BorderColorBrush" Color="{StaticResource BorderColor}" />
 
-
+    <Color x:Key="DarkColor">#101010</Color>
+    <SolidColorBrush x:Key="DarkColorBrush" Color="{StaticResource DarkColor}" />
+    
 </ResourceDictionary>
