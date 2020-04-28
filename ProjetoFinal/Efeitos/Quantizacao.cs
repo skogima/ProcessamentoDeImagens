@@ -24,7 +24,8 @@ namespace ProjetoFinal
                     xG = divisao - xG - 1;
                     xB = divisao - xB - 1;
 
-                    Color novaCor = Color.FromArgb(c.R + xR, c.G + xG, c.B + xB);
+                    Color novaCor = Color.FromArgb(c.R + xR, c.G + xG, c.B + xB); 
+
                     novaImagem.SetPixel(i, j, novaCor);
                 }
             }
