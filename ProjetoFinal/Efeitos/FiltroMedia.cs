@@ -5,10 +5,9 @@ namespace ProjetoFinal
 {
     public class FiltroMedia : IEfeito
     {
+        private const int escala = 9;
         public Bitmap AplicarEfeito(Bitmap bitmap, object parameter)
         {
-            int escala = MascaraHelper.GetFatorEscala(Mascara.Padrao);
-
             Bitmap bm = new Bitmap(bitmap.Width, bitmap.Height);
             int somaR, somaG, somaB;
 

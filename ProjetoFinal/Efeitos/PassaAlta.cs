@@ -8,7 +8,7 @@ namespace ProjetoFinal
         public Bitmap AplicarEfeito(Bitmap bitmap, object parameter)
         {
             var p = parameter?.ToString();
-            Mascara mascara = (Mascara)Enum.Parse(typeof(Mascara), p ?? nameof(Mascara.Padrao));
+            Mascara mascara = (Mascara)Enum.Parse(typeof(Mascara), p ?? nameof(Mascara.Prewitt));
             int[,] kernel = MascaraHelper.GetKernel(mascara);
             int escala = MascaraHelper.GetFatorEscala(mascara);
 
