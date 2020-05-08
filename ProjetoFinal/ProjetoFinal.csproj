@@ -80,6 +80,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Efeitos\Binarizacao.cs" />
+    <Compile Include="Efeitos\Equalizacao.cs" />
     <Compile Include="Efeitos\FiltroModa.cs" />
     <Compile Include="Efeitos\Girar.cs" />
     <Compile Include="Efeitos\Histograma.cs" />

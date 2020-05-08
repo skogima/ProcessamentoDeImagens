@@ -34,19 +34,15 @@ namespace ProjetoFinal
                         ki++;
                         kj = 0;
                     }
-                    if (somaB < 0)
-                        somaB = 0;
-                    else if (somaB > 255)
-                        somaB = 255;
-                    if (somaR < 0)
-                        somaR = 0;
-                    else if (somaR > 255)
-                        somaR = 255;
-                    if (somaG < 0)
-                        somaG = 0;
-                    else if (somaG > 255)
-                        somaG = 255;
-                    bm.SetPixel(i, j, Color.FromArgb(somaR / escala, somaB / escala, somaG / escala));
+                    int media = (int)Math.Round((somaR + somaB + somaG) / 3.0);
+                    media /= escala;
+
+                    if (media > 255)
+                        media = 255;
+                    else if (media < 0)
+                        media = 0;
+                   
+                    bm.SetPixel(i, j, Color.FromArgb(media, media, media));
                 }
             }
             return bm;

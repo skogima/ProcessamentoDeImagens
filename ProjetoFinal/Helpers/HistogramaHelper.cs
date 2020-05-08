@@ -32,9 +32,7 @@ namespace ProjetoFinal
 
         public void Calcular(Bitmap bitmap)
         {
-            HistogramaR.Clear();
-            HistogramaG.Clear();
-            HistogramaB.Clear();
+            Limpar();
 
             var db = Histograma.GerarHistogramaAzul(bitmap);
             var dr = Histograma.GerarHistogramaVermelho(bitmap);

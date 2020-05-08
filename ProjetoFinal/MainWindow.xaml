@@ -62,53 +62,59 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Margin="10 10 10 0">
+            <Grid Grid.Row="0" Margin="0 10 0 0">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Grid.Column="0" Margin="10 0 30 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Efeitos:" FontSize="14"  
+                               VerticalAlignment="Center" 
+                               Foreground="{DynamicResource TextForegroundBrush}" 
+                               Visibility="Visible" Margin="0 0 5 0" />
+                    <ComboBox Name="efeitosComboBox" Grid.Row="0" Grid.Column="1" ItemsSource="{Binding EfeitoItens}"
+                      SelectedItem="{Binding EfeitoSelecionado}" Visibility="Visible" VerticalAlignment="Center" />
 
-                <TextBlock Grid.Column="0" Text="Efeitos: " VerticalAlignment="Center" FontSize="14" 
-                       Foreground="{DynamicResource TextForegroundBrush}" Visibility="Visible" />
-                <ComboBox Name="efeitosComboBox" Grid.Column="1" ItemsSource="{Binding EfeitoItens}"
-                      SelectedItem="{Binding EfeitoSelecionado}" Margin="0 5" Visibility="Visible" />
-
-                <Button Width="40" Height="40" Grid.Column="2" Command="{Binding AlterarTemaCommand}"
-                    Style="{StaticResource MaterialDesignToolButton}">
-                    <fa:ImageAwesome Icon="Adjust"  Foreground="{DynamicResource BorderColorBrush}" />
-                </Button>
-
-                <Button Grid.Column="3" Grid.RowSpan="2" FontWeight="Normal" Content="Aplicar Efeito" 
-                    Command="{Binding AplicarCommand}" Background="{StaticResource CorDestaqueBrush}" 
-                    BorderBrush="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Background}" Focusable="False" />
-
-                <TextBlock Grid.Column="0" Grid.Row="1" Text="Parâmetro: " 
+                    <TextBlock Text="Parâmetro: " Grid.Column="0" Grid.Row="1"
                        VerticalAlignment="Center" 
                        Margin="0 0 5 0">
-                    <TextBlock.Visibility>
-                        <MultiBinding Converter="{local:VisibilityOrMultiConverter}">
-                            <Binding ElementName="parameterComboBox" Path="Visibility" />
-                            <Binding ElementName="parameterTextBox" Path="Visibility" />
-                        </MultiBinding>
-                    </TextBlock.Visibility>
-                </TextBlock>
+                        <TextBlock.Visibility>
+                            <MultiBinding Converter="{local:VisibilityOrMultiConverter}">
+                                <Binding ElementName="parameterComboBox" Path="Visibility" />
+                                <Binding ElementName="parameterTextBox" Path="Visibility" />
+                            </MultiBinding>
+                        </TextBlock.Visibility>
+                    </TextBlock>
 
-                <TextBox Grid.Column="1" Grid.Row="1" x:Name="parameterTextBox"
-                         Margin="0 5" Visibility="{Binding ElementName=efeitosComboBox, Path=SelectedItem, Converter={local:StringToVisibilityConverter}}"
+                    <TextBox x:Name="parameterTextBox" Margin="0 5" Grid.Column="1" Grid.Row="1"
+                         Visibility="{Binding ElementName=efeitosComboBox, Path=SelectedItem, Converter={local:StringToVisibilityConverter}}"
                          Text="{Binding ParametroSelecionado, UpdateSourceTrigger=PropertyChanged}" />
 
-                <ComboBox Grid.Column="1" Grid.Row="1" Margin="0 5" x:Name="parameterComboBox"
+                    <ComboBox Margin="0 5" x:Name="parameterComboBox" Grid.Column="1" Grid.Row="1"
                       SelectedItem="{Binding ParametroSelecionado}"
                       Visibility="{Binding ElementName=parameterComboBox, Path=ItemsSource, Converter={local:EnumerableToVisibilityConverter}}"
                       ItemsSource="{Binding ElementName=efeitosComboBox, Path=SelectedItem, Converter={local:StringToListConverter}}"
                       />
+                </Grid>
+
+                <Button Width="40" Height="40" Grid.Column="1" Command="{Binding AlterarTemaCommand}"
+                    Style="{StaticResource MaterialDesignToolButton}" Foreground="{DynamicResource CaptionForegroundBrush}" 
+                        Content="{materialDesign:PackIcon Kind=Brightness5, Size=34}">
+                </Button>
+
+                <Button Grid.Column="2" FontWeight="Normal" Content="Aplicar Efeito"  Margin="30 0"
+                    Command="{Binding AplicarCommand}" Background="{StaticResource CorDestaqueBrush}" 
+                    BorderBrush="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Background}" Focusable="False" />
             </Grid>
 
             <!--#region Borda separadora -->
@@ -132,31 +138,33 @@
             </Border>
             <!--#endregion-->
 
+            <!--#region Painel de carregamento -->
+            <Grid Grid.Row="2" Grid.RowSpan="2" Panel.ZIndex="2" 
+                  Visibility="{Binding Path=IsLoadingPanelVisible, Converter={local:BoolToVisibilityConverter}, FallbackValue=Collapsed}">
+                <Grid.Background>
+                    <SolidColorBrush Opacity="0.8" Color="{DynamicResource LoadingPanelColor}" />
+                </Grid.Background>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="Calculando..." FontSize="30" Foreground="{DynamicResource CaptionForegroundBrush}">
+                        <TextBlock.Effect>
+                            <DropShadowEffect Opacity="0.2" Color="{DynamicResource CaptionForeground}" BlurRadius="0" RenderingBias="Quality" ShadowDepth="3" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <fa:ImageAwesome Icon="Cog" Spin="True" Height="50" Width="50" Foreground="{DynamicResource CaptionForegroundBrush}" />
+                </StackPanel>
+            </Grid>
+            <!--#endregion-->
+
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-
-                <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="3" Panel.ZIndex="2" 
-                  Visibility="{Binding Path=IsLoadingPanelVisible, Converter={local:BoolToVisibilityConverter}, FallbackValue=Collapsed}">
-                    <Grid.Background>
-                        <SolidColorBrush Opacity="0.8" Color="{DynamicResource LoadingPanelColor}" />
-                    </Grid.Background>
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock Text="Calculando..." FontSize="30" Foreground="{DynamicResource CaptionForegroundBrush}">
-                            <TextBlock.Effect>
-                                <DropShadowEffect Opacity="0.2" Color="{DynamicResource CaptionForeground}" BlurRadius="0" RenderingBias="Quality" ShadowDepth="3" />
-                            </TextBlock.Effect>
-                        </TextBlock>
-                        <fa:ImageAwesome Icon="Cog" Spin="True" Height="50" Width="50" Foreground="{DynamicResource CaptionForegroundBrush}" />
-                    </StackPanel>
-                </Grid>
 
                 <Border Grid.Row="0" Grid.Column="0" BorderThickness="0 0 0.3 0">
                     <!--region Borda lateral -->
@@ -171,7 +179,7 @@
 
                     <Button Style="{StaticResource HoverlessButton}" FontWeight="Light" Command="{Binding AbrirImagemCommand}">
                         <Grid>
-                            <Image Source="{Binding ImagemOriginalBitmap, Converter={local:BitmapToBitmapSourceConverter}}" Stretch="Fill" Panel.ZIndex="1">
+                            <Image Source="{Binding ImagemOriginal, Converter={local:BitmapToBitmapSourceConverter}}" Stretch="Fill" Panel.ZIndex="1">
                                 <Image.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="Girar Imagem...">
@@ -193,25 +201,34 @@
                         </Grid>
                     </Button>
                 </Border>
-                <Image Grid.Row="0" Grid.Column="1" Stretch="Fill" 
-                   Source="{Binding ImagemProcessadaSource, Converter={local:BitmapToBitmapSourceConverter}}">
+                
+                <!-- Botão para "trocar" imagem -->
+                <Button Grid.Row="0" Grid.Column="1" Style="{StaticResource MaterialDesignToolButton}"
+                        Content="{materialDesign:PackIcon Kind=ArrowLeftThick, Size=26}"
+                        Command="{Binding EnviarImagemCommand}"/>
+
+                <Image Grid.Row="0" Grid.Column="2" Stretch="Fill" 
+                   Source="{Binding ImagemProcessada, Converter={local:BitmapToBitmapSourceConverter}}">
                     <Image.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Salvar Imagem..." Command="{Binding SalvarImagemCommand}" />
                         </ContextMenu>
                     </Image.ContextMenu>
                 </Image>
-
+                
+                <!-- Informações (resolução) -->
                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="5" HorizontalAlignment="Center" >
                     <TextBlock Text="Resolução: " />
                     <TextBlock Text="{Binding ImagemOriginalResolucao}"  />
                 </StackPanel>
-                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
                     <TextBlock Text="Resolução: "  />
                     <TextBlock Text="{Binding ImagemProcessadaResolucao}" />
                 </StackPanel>
+            </Grid>
 
-                <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 0 5" 
+            <StackPanel Grid.Row="3">
+                <Button Grid.ColumnSpan="2" Margin="0 0 0 5" 
                         Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
                         VerticalAlignment="Center" HorizontalAlignment="Center" 
                         Content="{materialDesign:PackIcon Kind=ChartBar,Size=24}"
@@ -225,13 +242,12 @@
                     </Button.IsEnabled>
                 </Button>
 
-                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal"
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 5"
                             VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Text="Calcular histograma?" Margin="7 0"/>
+                    <TextBlock Text="Calcular histograma?" Margin="10 0"/>
                     <ToggleButton IsChecked="{Binding CalcularHistograma, Mode=TwoWay}" />
                 </StackPanel>
-
-            </Grid>
+            </StackPanel>
         </Grid>
     </materialDesign:DialogHost>
 </Window>

@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace ProjetoFinal
 {
@@ -10,7 +11,7 @@ namespace ProjetoFinal
         
         private Color Binarizar(Color pixel, int limiar)
         {
-            var media = (pixel.R + pixel.G + pixel.B) / 3;
+            int media = (int)Math.Round((pixel.R + pixel.G + pixel.B) / 3.0);
             if (media >= limiar)
                 return branco;
             return preto;
@@ -24,9 +25,11 @@ namespace ProjetoFinal
         /// <returns>A imagem processada</returns>
         public Bitmap AplicarEfeito(Bitmap bitmap, object parameter)
         {
-            int? limiar = parameter as int?;
+            int limiar = limiarPadrao;
+            if (parameter != null)
+                limiar = Convert.ToInt32(parameter);
 
-            return BinarizarImagem(bitmap, limiar ?? limiarPadrao);
+            return BinarizarImagem(bitmap, limiar);
         }
 
         public Bitmap BinarizarImagem(Bitmap bitmap, int limiar)
