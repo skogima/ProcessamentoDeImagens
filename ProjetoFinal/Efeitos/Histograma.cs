@@ -12,13 +12,11 @@ namespace ProjetoFinal
             Azul,
             Cinza
         }
-        private static Dictionary<int, int> GerarHistograma(Bitmap bitmap, Canal canal)
+
+        private static double[] GerarHistograma(Bitmap bitmap, Canal canal)
         {
-            var histograma = new Dictionary<int, int>();
-            for (int i = 0; i < 256; i++)
-            {
-                histograma.Add(i, 0);
-            }
+            var histograma = new double[256];
+
             for (int i = 0; i < bitmap.Width; i++)
             {
                 for (int j = 0; j < bitmap.Height; j++)
@@ -28,7 +26,7 @@ namespace ProjetoFinal
                     switch (canal)
                     {
                         case Canal.Vermelho:
-                            histograma[c.R] += 1;
+                            histograma[c.R]++;
                             break;
                         case Canal.Verde:
                             histograma[c.G]++;
@@ -47,21 +45,21 @@ namespace ProjetoFinal
             return histograma;
         }
 
-        public static Dictionary<int, int> GerarHistogramaVermelho(Bitmap bitmap)
+        public static double[] GerarHistogramaVermelho(Bitmap bitmap)
         {
             return GerarHistograma(bitmap, Canal.Vermelho);
         }
 
-        public static Dictionary<int, int> GerarHistogramaAzul(Bitmap bitmap)
+        public static double[] GerarHistogramaAzul(Bitmap bitmap)
         {
             return GerarHistograma(bitmap, Canal.Azul);
         }
 
-        public static Dictionary<int, int> GerarHistogramaVerde(Bitmap bitmap)
+        public static double[] GerarHistogramaVerde(Bitmap bitmap)
         {
             return GerarHistograma(bitmap, Canal.Verde);
         }
-        public static Dictionary<int, int> GerarHistogramaCinza(Bitmap bitmap)
+        public static double[] GerarHistogramaCinza(Bitmap bitmap)
         {
             return GerarHistograma(bitmap, Canal.Cinza);
         }

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjetoFinal"
-        xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
+        xmlns:live="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -21,7 +21,7 @@
     <!--#region DialogHost para o histograma -->
     <materialDesign:DialogHost CloseOnClickAway="True">
         <materialDesign:DialogHost.DialogContent>
-            <Grid Width="650" Height="350" Margin="10">
+            <Grid MinWidth="700" MinHeight="350" Margin="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
@@ -31,24 +31,15 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <oxy:Plot Grid.Column="0" Grid.Row="0" Margin="5 0">
-                    <oxy:LineSeries StrokeThickness="2" Color="Green" 
-                                    ItemsSource="{Binding HistogramaOriginal.HistogramaG, UpdateSourceTrigger=PropertyChanged}" />
-                    <oxy:LineSeries StrokeThickness="2" Color="Blue" 
-                                    ItemsSource="{Binding HistogramaOriginal.HistogramaB, UpdateSourceTrigger=PropertyChanged}" />
-                    <oxy:LineSeries StrokeThickness="2" Color="Red" 
-                                    ItemsSource="{Binding HistogramaOriginal.HistogramaR, UpdateSourceTrigger=PropertyChanged}" />
-                </oxy:Plot>
+                <live:CartesianChart DisableAnimations="True" Grid.Column="0" Grid.Row="0" Margin="5 0"
+                                     Series="{Binding HistogramaOriginal.HistogramaSeries, UpdateSourceTrigger=PropertyChanged}">
+                </live:CartesianChart>
+                
                 <TextBlock Grid.Column="0" Grid.Row="1" Text="Histograma da imagem original" HorizontalAlignment="Center" />
 
-                <oxy:Plot Grid.Column="1" Grid.Row="0" Margin="5 0">
-                    <oxy:LineSeries Color="Red" StrokeThickness="2" 
-                                    ItemsSource="{Binding HistogramaProcessado.HistogramaR, UpdateSourceTrigger=PropertyChanged}" />
-                    <oxy:LineSeries Color="Green" StrokeThickness="2"
-                                    ItemsSource="{Binding HistogramaProcessado.HistogramaG, UpdateSourceTrigger=PropertyChanged}" />
-                    <oxy:LineSeries Color="Blue" StrokeThickness="2" 
-                                    ItemsSource="{Binding HistogramaProcessado.HistogramaB, UpdateSourceTrigger=PropertyChanged}" />
-                </oxy:Plot>
+                <live:CartesianChart Visibility="Visible" DisableAnimations="True" Grid.Column="1" Grid.Row="0" Margin="5 0"
+                                     Series="{Binding HistogramaProcessado.HistogramaSeries, UpdateSourceTrigger=PropertyChanged}">
+                </live:CartesianChart>
                 <TextBlock Grid.Column="1" Grid.Row="1" Text="Histograma da imagem processada" HorizontalAlignment="Center" />
             </Grid>
         </materialDesign:DialogHost.DialogContent>
