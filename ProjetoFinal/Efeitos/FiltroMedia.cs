@@ -26,7 +26,7 @@ namespace ProjetoFinal
                         }
                     }
               
-                    bm.SetPixel(i, j, Color.FromArgb(somaR / 9, somaG / 9 , somaB / 9));
+                    bm.SetPixel(i, j, Color.FromArgb(somaR / escala, somaG / escala, somaB / escala));
                 }
             }
             return bm;

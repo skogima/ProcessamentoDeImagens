@@ -13,8 +13,8 @@ namespace ProjetoFinal
         {
             int media = (int)Math.Round((pixel.R + pixel.G + pixel.B) / 3.0);
             if (media >= limiar)
-                return branco;
-            return preto;
+                return preto;
+            return branco;
         }
 
         /// <summary>

@@ -5,8 +5,7 @@
         Prewitt,
         Kirsch,
         Sobel,
-        Robinson3,
-        Robinson5,
+        Robinson,
         LaPlaciano
     }
 }
