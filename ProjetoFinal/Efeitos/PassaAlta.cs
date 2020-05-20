@@ -1,11 +1,13 @@
-﻿using PropertyChanged;
-using System;
+﻿using System;
 using System.Drawing;
 
 namespace ProjetoFinal
 {
     public class PassaAlta : IEfeito
     {
+        /// <summary>
+        /// Tentativa de implementação usando a magnitude dos vetores
+        /// </summary>
         private int CalcularSqrt(Bitmap bmp, int i, int j, double escala, OperadorPassaAlta kernel)
         {
             int Rx = 0, Ry = 0;
@@ -41,6 +43,9 @@ namespace ProjetoFinal
             return (int)media;
         }
 
+        /// <summary>
+        /// Implementação sem a magnitude
+        /// </summary>
         private int Calcular(Bitmap bmp, int i, int j, double escala, OperadorPassaAlta kernel)
         {
             int somaR = 0, somaG = 0, somaB = 0;
@@ -61,7 +66,6 @@ namespace ProjetoFinal
                 kj = 0;
             }
             double media = (somaR + somaB + somaG) / 3.0;
- 
 
             if (media > 255) media = 255;
             else if (media < 0) media = 0;
